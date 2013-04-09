@@ -93,6 +93,8 @@ namespace FlyoutNavigation
 			AlwaysShowLandscapeMenu = true;
 
 			this.View.AddGestureRecognizer (new OpenMenuGestureRecognizer (this, new Selector ("panned"), this));
+
+			ShouldAutoPushFirstView = true;
 		}
 
 		public event UITouchEventArgs ShouldReceiveTouch;
@@ -177,6 +179,12 @@ namespace FlyoutNavigation
 			get{ return navigation.TableView;}
 		}
 
+		/// <summary>
+		/// When setting the ViewControllers the first view is automatically displayed. Settings this to false stops that
+		/// </summary>
+		/// <value><c>true</c> if should auto push first view; otherwise, <c>false</c>.</value>
+		public Boolean ShouldAutoPushFirstView { get; set; }
+
 		protected UIViewController[] viewControllers;
 
 		public UIViewController[] ViewControllers {
@@ -184,7 +192,9 @@ namespace FlyoutNavigation
 			set {
 				EnsureInvokedOnMainThread (delegate {
 					viewControllers = value;
-					NavigationItemSelected (GetIndexPath (SelectedIndex));
+					if (ShouldAutoPushFirstView){
+						NavigationItemSelected (GetIndexPath (SelectedIndex));
+					}
 				});
 			}
 		}
